@@ -33,6 +33,8 @@ func (c *Config) InitConfig() error {
 // 监控配置改动
 func (c *Config) WatchConfig(change chan int) {
 	viper.WatchConfig()
+	// TODO: 这个会触发两次, 考虑使用限流模式
+	// https://github.com/gohugoio/hugo/blob/master/watcher/batcher.go
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		log.Printf("配置已经被改变: %s", e.Name)
 		// time.Sleep(time.Second)
