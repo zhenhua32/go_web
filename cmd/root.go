@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"tzh.com/web/config"
@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 	Long: `server is a simple restful api server
 	use help get more ifo`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Println(args)
+		logrus.Info("启动参数: ", args)
 		runServer()
 	},
 }
@@ -47,14 +47,14 @@ func runServer() {
 	// 检查服务器正常启动
 	go func() {
 		if err := check.PingServer(); err != nil {
-			log.Fatal("服务器没有响应:", err)
+			logrus.Fatal("服务器没有响应:", err)
 		}
-		log.Printf("服务器正常启动")
+		logrus.Info("服务器正常启动")
 	}()
 
 	// 服务器裕兴的地址和端口
 	addr := viper.GetString("addr")
-	log.Printf("启动服务器在 http address: %s", addr)
+	logrus.Infof("启动服务器在 http address: %s", addr)
 
 	srv := &http.Server{
 		Addr:    addr,
@@ -63,14 +63,14 @@ func runServer() {
 	// 启动服务
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			logrus.Fatalf("listen: %s\n", err)
 		}
 	}()
 
 	// 等待配置改变, 然后重启
 	<-configChange
 	if err := srv.Shutdown(context.Background()); err != nil {
-		log.Fatal("Server Shutdown:", err)
+		logrus.Fatal("Server Shutdown:", err)
 	}
 	runServer()
 }
@@ -90,14 +90,15 @@ func initConfig() {
 	if err := c.InitConfig(); err != nil {
 		panic(err)
 	}
-	log.Printf("载入配置成功")
+	c.InitLog()
+	logrus.Info("载入配置成功")
 	c.WatchConfig(configChange)
 }
 
 // 包装了 rootCmd.Execute()
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Println(err)
+		logrus.Error(err)
 		os.Exit(1)
 	}
 }

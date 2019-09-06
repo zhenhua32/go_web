@@ -3,3 +3,10 @@ addr: :8081 # HTTP绑定端口
 name: web_tt # API Server的名字
 url: http://127.0.0.1:8081 # pingServer函数请求的API服务器的ip:port
 max_ping_count: 5 # pingServer函数try的次数
+log:
+  use_json: true
+  logger_level: debug
+  logger_file: log/server.log
+  gin_file: log/gin.log
+  gin_console: true
+

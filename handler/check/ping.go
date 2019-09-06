@@ -2,9 +2,10 @@ package check
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/viper"
 )
@@ -16,7 +17,7 @@ func PingServer() error {
 			return nil
 		}
 
-		log.Printf("第 %d 失败, 一秒后重试", i)
+		logrus.Warnf("第 %d 失败, 一秒后重试", i)
 		time.Sleep(time.Second)
 	}
 
