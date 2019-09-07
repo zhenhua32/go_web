@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"tzh.com/web/config"
 	"tzh.com/web/handler/check"
+	"tzh.com/web/model"
 	"tzh.com/web/router"
 )
 
@@ -30,6 +31,10 @@ var rootCmd = &cobra.Command{
 
 // 定义 rootCmd 命令的执行
 func runServer() {
+	// 初始化数据库
+	model.DB.Init()
+	defer model.DB.Close()
+
 	// 设置运行模式
 	gin.SetMode(viper.GetString("runmode"))
 
