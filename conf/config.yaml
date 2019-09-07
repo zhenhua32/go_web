@@ -4,9 +4,15 @@ name: web_tt # API Server的名字
 url: http://127.0.0.1:8081 # pingServer函数请求的API服务器的ip:port
 max_ping_count: 5 # pingServer函数try的次数
 log:
-  use_json: true
-  logger_level: debug
-  logger_file: log/server.log
+  logrus_json: true
+  logrus_level: debug
+  logrus_file: log/server.log
+  logrus_console: true
   gin_file: log/gin.log
   gin_console: true
-
+db:
+  name: db_apiserver
+  addr: 127.0.0.1:3306
+  username: root
+  password: "1234"
+gormlog: true # gorm 的日志魔视, true 是详细日志, false 不记录日志

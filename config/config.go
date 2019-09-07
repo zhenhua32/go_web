@@ -52,13 +52,13 @@ func (c *Config) WatchConfig(change chan int) {
 
 // 初始化日志
 func (c *Config) InitLog() {
-	// log.use_json
-	if viper.GetBool("log.use_json") {
+	// log.logrus_json
+	if viper.GetBool("log.logrus_json") {
 		logrus.SetFormatter(&logrus.JSONFormatter{})
 	}
 
-	// log.logger_level
-	switch viper.GetString("log.logger_level") {
+	// log.logrus_level
+	switch viper.GetString("log.logrus_level") {
 	case "trace":
 		logrus.SetLevel(logrus.TraceLevel)
 	case "debug":
@@ -71,20 +71,24 @@ func (c *Config) InitLog() {
 		logrus.SetLevel(logrus.ErrorLevel)
 	}
 
-	// log.logger_file
-	logger_file := viper.GetString("log.logger_file")
-	os.MkdirAll(filepath.Dir(logger_file), os.ModePerm)
+	// log.logrus_file
+	logrusFile := viper.GetString("log.logrus_file")
+	os.MkdirAll(filepath.Dir(logrusFile), os.ModePerm)
 
-	file, err := os.OpenFile(logger_file, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	file, err := os.OpenFile(logrusFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err == nil {
-		logrus.SetOutput(file)
+		if viper.GetBool("log.logrus_console") {
+			logrus.SetOutput(io.MultiWriter(file, os.Stdout))
+		} else {
+			logrus.SetOutput(file)
+		}
 	}
 
 	// log.gin_file & log.gin_console
-	gin_file := viper.GetString("log.gin_file")
-	os.MkdirAll(filepath.Dir(gin_file), os.ModePerm)
+	ginFile := viper.GetString("log.gin_file")
+	os.MkdirAll(filepath.Dir(ginFile), os.ModePerm)
 
-	file, err = os.OpenFile(gin_file, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	file, err = os.OpenFile(ginFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err == nil {
 		if viper.GetBool("log.gin_console") {
 			gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
