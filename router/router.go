@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"tzh.com/web/handler/check"
 	"tzh.com/web/router/middleware"
+	"tzh.com/web/handler/user"
 )
 
 // 载入中间件
@@ -20,6 +21,11 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.NoRoute(func(ctx *gin.Context) {
 		ctx.String(http.StatusNotFound, "incorrect api router")
 	})
+
+	u := g.Group("/v1/user")
+	{
+		u.POST("", user.Create)
+	}
 
 	checkRoute := g.Group("/check")
 	{
