@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"tzh.com/web/handler/check"
-	"tzh.com/web/router/middleware"
 	"tzh.com/web/handler/user"
+	"tzh.com/web/router/middleware"
 )
 
 // 载入中间件
@@ -24,7 +24,7 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	u := g.Group("/v1/user")
 	{
-		u.POST("", user.Create)
+		u.POST("/:username", user.Create)
 	}
 
 	checkRoute := g.Group("/check")
