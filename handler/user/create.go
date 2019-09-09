@@ -1,42 +1,46 @@
 package user
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"tzh.com/web/handler"
+	"tzh.com/web/model"
 	"tzh.com/web/pkg/errno"
 )
 
+// 创建一个新的用户帐号
 func Create(ctx *gin.Context) {
+	logrus.WithField(
+		"X-Request-Id", "",
+	).Info("用户创建函数被调用")
 	// 将 request body 绑定到一个结构体总
 	var r CreateRequest
-
 	if err := ctx.Bind(&r); err != nil {
 		handler.SendResponse(ctx, errno.ErrBind, nil)
 		return
 	}
 	logrus.Debugf("username is: [%s], password is [%s]", r.Username, r.Password)
 
-	admin := ctx.Param("username")
-	logrus.Infof("URL param : %s", admin)
+	u := model.UserModel{
+		Username: r.Username,
+		Password: r.Password,
+	}
 
-	desc := ctx.DefaultQuery("desc", "")
-	logrus.Infof("URL query param des: %s", desc)
-
-	contentType := ctx.GetHeader("Content-Type")
-	logrus.Infof("Header Content-Type: %s", contentType)
-
-	if r.Username == "" {
-		err := errno.New(errno.ErrUserNotFound, fmt.Errorf("username 不在数据库中"))
-		handler.SendResponse(ctx, err, nil)
+	// 验证结构
+	if err := u.Validate(); err != nil {
+		handler.SendResponse(ctx, errno.ErrValidation, nil)
 		return
 	}
 
-	if r.Password == "" {
-		err := fmt.Errorf("passwrod 是空的")
-		handler.SendResponse(ctx, err, nil)
+	// 加密密码
+	if err := u.Encrypt(); err != nil {
+		handler.SendResponse(ctx, errno.ErrEncrypt, nil)
+		return
+	}
+
+	// 插入用户到数据库中
+	if err := u.Create(); err != nil {
+		handler.SendResponse(ctx, errno.ErrDatabase, nil)
 		return
 	}
 

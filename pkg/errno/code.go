@@ -13,6 +13,13 @@ var (
 	InternalServerError = &Errno{Code: 10001, Message: "内部服务器错误"}
 	ErrBind             = &Errno{Code: 10002, Message: "绑定请求体到 stuct 时发生错误"}
 
+	ErrValidation = &Errno{Code: 20001, Message: "验证失败"}
+	ErrDatabase   = &Errno{Code: 20002, Message: "数据库错误"}
+	ErrToken      = &Errno{Code: 20003, Message: "签名 JSON web token 时发生错误"}
+
 	// user errors
-	ErrUserNotFound = &Errno{Code: 20102, Message: "用户不存在"}
+	ErrEncrypt           = &Errno{Code: 20101, Message: "加密用户密码时发生错误"}
+	ErrUserNotFound      = &Errno{Code: 20102, Message: "用户没找到"}
+	ErrTokenInvalid      = &Errno{Code: 20103, Message: "token 是无效的"}
+	ErrPasswordIncorrect = &Errno{Code: 20104, Message: "密码错误"}
 )
