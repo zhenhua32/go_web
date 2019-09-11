@@ -41,7 +41,7 @@ func openDB(username, password, addr, name string) *gorm.DB {
 	if err != nil {
 		logrus.Fatalf("数据库连接失败. 数据库名字: %s. 错误信息: %s", name, err)
 	} else {
-		logrus.Infof("数据库链接成功, 数据库名字: %s", name)
+		logrus.Infof("数据库连接成功, 数据库名字: %s", name)
 	}
 
 	setupDB(db)
@@ -54,6 +54,9 @@ func setupDB(db *gorm.DB) {
 	//db.DB().SetMaxOpenConns(20000)
 	// 用于设置闲置的连接数.设置闲置的连接数则当开启的一个连接使用完成后可以放在池里等候下一次使用。
 	db.DB().SetMaxIdleConns(0)
+
+	// 自动适应结构
+	db.AutoMigrate(&UserModel{})
 }
 
 func InitDB() *gorm.DB {

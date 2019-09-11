@@ -6,12 +6,13 @@ import (
 	"tzh.com/web/handler"
 	"tzh.com/web/model"
 	"tzh.com/web/pkg/errno"
+	"tzh.com/web/util"
 )
 
 // 创建一个新的用户帐号
 func Create(ctx *gin.Context) {
 	logrus.WithField(
-		"X-Request-Id", "",
+		"X-Request-Id", util.GetReqID(ctx),
 	).Info("用户创建函数被调用")
 	// 将 request body 绑定到一个结构体总
 	var r CreateRequest
