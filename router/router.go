@@ -28,8 +28,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.POST("", user.Create)
 		u.PUT("/:id", user.Save)
 		u.DELETE("/:d", user.Delete)
-		u.GET("/:username", user.Get)
+		u.GET("/:id", user.Get)
 		u.PUT("/:id/update", user.Update)
+		// u.GET("/:username/name", user.GetByName)
 	}
 
 	checkRoute := g.Group("/check")

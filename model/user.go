@@ -11,10 +11,16 @@ type UserModel struct {
 	BaseModel
 	Username string `json:"username" gorm:"column:username;not null" binding:"required" validate:"min=1,max=32"`
 	Password string `json:"password" gorm:"column:password;not null" binding:"required" validate:"min=5,max=128"`
+	// Password string `json:"password" gorm:"column:password;not null" binding:"required" validate:"omitempty,min=5,max=128"`
 }
 
 func (*UserModel) TableName() string {
 	return "tb_users"
+}
+
+// 填充数据, 基于 ID
+func (u *UserModel) Fill() error {
+	return DB.Self.First(u).Error
 }
 
 // 创建新用户
@@ -82,14 +88,14 @@ func ListUser(username string, offset, limit int) ([]*UserModel, uint, error) {
 
 	where := DB.Self.Where("username like ?", "%"+username+"%")
 
-	// TODO: 这里有错误
+	// 注意 要使用指针
 	// 统计用户的总数
-	if result := where.Find(users).Count(&count); result.Error != nil {
+	if result := where.Find(&users).Count(&count); result.Error != nil {
 		return users, count, result.Error
 	}
 
 	// 获取用户
-	if result := where.Offset(offset).Limit(limit).Order("id desc").Find(users); result.Error != nil {
+	if result := where.Offset(offset).Limit(limit).Order("id desc").Find(&users); result.Error != nil {
 		return users, count, result.Error
 	}
 

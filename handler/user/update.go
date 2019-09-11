@@ -64,12 +64,12 @@ func Update(ctx *gin.Context) {
 
 	// 验证, 不太好做
 	var userV *model.UserModel
-	if err := mapstructure.Decode(&data, userV); err != nil {
-		handler.SendResponse(ctx, errno.ErrBind, nil)
+	if err := mapstructure.Decode(&data, &userV); err != nil {
+		handler.SendResponse(ctx, err, nil)
 		return
 	}
 	if err := userV.Validate(); err != nil {
-		handler.SendResponse(ctx, errno.ErrValidation, nil)
+		handler.SendResponse(ctx, err, nil)
 		return
 	}
 

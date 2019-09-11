@@ -41,18 +41,19 @@ func ListUser(username string, offset, limit int) ([]*model.UserInfo, uint, erro
 				errChan <- err
 				return
 			}
-			
+
 			// 更新数据时加锁, 保持一致性
 			userList.Lock.Lock()
 			defer userList.Lock.Unlock()
+
 			userList.IdMap[u.ID] = &model.UserInfo{
 				ID:        u.ID,
 				Username:  u.Username,
 				SayHello:  fmt.Sprintf("Hello %s", shortId),
 				Password:  u.Password,
-				CreatedAt: u.CreatedAt.Format("2006-01-02 15:04:05"),
-				UpdatedAt: u.UpdatedAt.Format("2006-01-02 15:04:05"),
-				DeletedAt: u.DeletedAt.Format("2006-01-02 15:04:05"),
+				CreatedAt: util.TimeToStr(&u.CreatedAt),
+				UpdatedAt: util.TimeToStr(&u.UpdatedAt),
+				DeletedAt: util.TimeToStr(u.DeletedAt),
 			}
 		}(u)
 	}
