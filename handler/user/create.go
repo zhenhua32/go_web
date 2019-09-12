@@ -17,7 +17,7 @@ func Create(ctx *gin.Context) {
 	// 将 request body 绑定到一个结构体总
 	var r CreateRequest
 	if err := ctx.Bind(&r); err != nil {
-		handler.SendResponse(ctx, errno.ErrBind, nil)
+		handler.SendResponse(ctx, errno.New(errno.ErrBind, err), nil)
 		return
 	}
 	logrus.Debugf("username is: [%s], password is [%s]", r.Username, r.Password)
@@ -29,19 +29,19 @@ func Create(ctx *gin.Context) {
 
 	// 验证结构
 	if err := u.Validate(); err != nil {
-		handler.SendResponse(ctx, errno.ErrValidation, nil)
+		handler.SendResponse(ctx, errno.New(errno.ErrValidation, err), nil)
 		return
 	}
 
 	// 加密密码
 	if err := u.Encrypt(); err != nil {
-		handler.SendResponse(ctx, errno.ErrEncrypt, nil)
+		handler.SendResponse(ctx, errno.New(errno.ErrEncrypt, err), nil)
 		return
 	}
 
 	// 插入用户到数据库中
 	if err := u.Create(); err != nil {
-		handler.SendResponse(ctx, errno.ErrDatabase, nil)
+		handler.SendResponse(ctx, errno.New(errno.ErrDatabase, err), nil)
 		return
 	}
 

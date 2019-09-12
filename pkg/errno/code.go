@@ -16,6 +16,7 @@ var (
 	ErrValidation = &Errno{Code: 20001, Message: "验证失败"}
 	ErrDatabase   = &Errno{Code: 20002, Message: "数据库错误"}
 	ErrToken      = &Errno{Code: 20003, Message: "签名 JSON web token 时发生错误"}
+	ErrFill       = &Errno{Code: 20004, Message: "从数据库填充 struct 时发生错误"}
 
 	// user errors
 	ErrEncrypt           = &Errno{Code: 20101, Message: "加密用户密码时发生错误"}

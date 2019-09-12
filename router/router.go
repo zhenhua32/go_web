@@ -29,8 +29,9 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.PUT("/:id", user.Save)
 		u.DELETE("/:d", user.Delete)
 		u.GET("/:id", user.Get)
-		u.PUT("/:id/update", user.Update)
-		// u.GET("/:username/name", user.GetByName)
+		u.PATCH("/:id", user.Update)
+		// 设计得不太好, 只能用 id 作为占位符
+		u.GET("/:id/byname", user.GetByName)
 	}
 
 	checkRoute := g.Group("/check")

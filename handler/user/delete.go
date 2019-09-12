@@ -13,7 +13,7 @@ func Delete(ctx *gin.Context) {
 	// 将文本转换为字符串
 	userId, _ := strconv.Atoi(ctx.Param("id"))
 	if err := model.DeleteUser(uint(userId)); err != nil {
-		handler.SendResponse(ctx, errno.ErrDatabase, nil)
+		handler.SendResponse(ctx, errno.New(errno.ErrDatabase, err), nil)
 		return
 	}
 

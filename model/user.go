@@ -11,7 +11,6 @@ type UserModel struct {
 	BaseModel
 	Username string `json:"username" gorm:"column:username;not null" binding:"required" validate:"min=1,max=32"`
 	Password string `json:"password" gorm:"column:password;not null" binding:"required" validate:"min=5,max=128"`
-	// Password string `json:"password" gorm:"column:password;not null" binding:"required" validate:"omitempty,min=5,max=128"`
 }
 
 func (*UserModel) TableName() string {
@@ -19,8 +18,8 @@ func (*UserModel) TableName() string {
 }
 
 // 填充数据, 基于 ID
-func (u *UserModel) Fill() error {
-	return DB.Self.First(u).Error
+func (u *UserModel) Fill(id uint) error {
+	return DB.Self.First(u, id).Error
 }
 
 // 创建新用户
@@ -29,8 +28,14 @@ func (u *UserModel) Create() error {
 }
 
 // 删除用户
-func (u *UserModel) Delete() error {
-	return DB.Self.Delete(u).Error
+func (u *UserModel) Delete(hard bool) error {
+	if hard {
+		// 硬删除
+		return DB.Self.Unscoped().Delete(u).Error
+	} else {
+		// 软删除
+		return DB.Self.Delete(u).Error
+	}
 }
 
 // 保存用户, 会更新所有的字段
@@ -63,6 +68,32 @@ func (u *UserModel) Validate() error {
 	return validate.Struct(u)
 }
 
+// 验证 map 结构, 并加密密码(如果存在的话)
+func ValidateAndUpdateUser(data *map[string]interface{}) error {
+	validate := validator.New()
+	// 验证 username
+	if username, ok := (*data)["username"]; ok {
+		if err := validate.Var(username, "min=1,max=32"); err != nil {
+			return err
+		}
+	}
+	// 验证 password
+	if password, ok := (*data)["password"]; ok {
+		if err := validate.Var(password, "min=5,max=128"); err != nil {
+			return err
+		}
+		// 加密密码
+		newPassword, err := auth.Encrypt(password.(string))
+		if err == nil {
+			(*data)["password"] = newPassword
+		} else {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // 基于名字获取用户
 func GetUserByName(username string) (*UserModel, error) {
 	user := &UserModel{}
@@ -70,11 +101,11 @@ func GetUserByName(username string) (*UserModel, error) {
 	return user, result.Error
 }
 
-// 基于 id 删除用户
+// 基于 id 删除用户, 软删除
 func DeleteUser(id uint) error {
 	user := UserModel{}
 	user.ID = id
-	return user.Delete()
+	return user.Delete(false)
 }
 
 // 获取用户的列表, 用户的总数
