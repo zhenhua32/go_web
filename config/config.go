@@ -26,7 +26,7 @@ func (c *Config) InitConfig() error {
 	}
 	viper.SetConfigType("yaml")
 
-	// 从环境变量总读取
+	// 从环境变量中读取
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix("web")
 	viper.SetEnvKeyReplacer(strings.NewReplacer("_", "."))

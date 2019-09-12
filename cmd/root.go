@@ -57,7 +57,7 @@ func runServer() {
 		logrus.Info("服务器正常启动")
 	}()
 
-	// 服务器裕兴的地址和端口
+	// 服务器的地址和端口
 	addr := viper.GetString("addr")
 	logrus.Infof("启动服务器在 http address: %s", addr)
 
