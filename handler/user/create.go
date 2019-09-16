@@ -16,7 +16,7 @@ func Create(ctx *gin.Context) {
 	).Info("用户创建函数被调用")
 	// 将 request body 绑定到一个结构体中
 	var r CreateRequest
-	if err := ctx.Bind(&r); err != nil {
+	if err := ctx.ShouldBindJSON(&r); err != nil {
 		handler.SendResponse(ctx, errno.New(errno.ErrBind, err), nil)
 		return
 	}

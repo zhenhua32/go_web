@@ -19,7 +19,7 @@ func Save(ctx *gin.Context) {
 	userId, _ := strconv.Atoi(ctx.Param("id"))
 
 	var u model.UserModel
-	if err := ctx.Bind(&u); err != nil {
+	if err := ctx.ShouldBindJSON(&u); err != nil {
 		handler.SendResponse(ctx, errno.New(errno.ErrBind, err), nil)
 		return
 	}
@@ -55,7 +55,7 @@ func Update(ctx *gin.Context) {
 	userId, _ := strconv.Atoi(ctx.Param("id"))
 
 	var data map[string]interface{}
-	if err := ctx.Bind(&data); err != nil {
+	if err := ctx.ShouldBindJSON(&data); err != nil {
 		handler.SendResponse(ctx, errno.New(errno.ErrBind, err), nil)
 		return
 	}
