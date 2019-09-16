@@ -30,7 +30,7 @@ func Login(ctx *gin.Context) {
 	// 签发 token
 	t, err := token.Sign(user.ID, user.Username)
 	if err != nil {
-		handler.SendResponse(ctx, errno.New(errno.ErrToken, err), nil)
+		handler.SendResponse(ctx, errno.New(errno.ErrTokenSign, err), nil)
 		return
 	}
 	handler.SendResponse(ctx, nil, model.Token{Token: t})
