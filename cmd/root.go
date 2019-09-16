@@ -13,6 +13,7 @@ import (
 	"tzh.com/web/handler/check"
 	"tzh.com/web/model"
 	"tzh.com/web/router"
+	"tzh.com/web/router/middleware"
 )
 
 var cfgFile string
@@ -41,7 +42,10 @@ func runServer() {
 	// 初始化空的服务器
 	app := gin.New()
 	// 保存中间件
-	middlewares := []gin.HandlerFunc{}
+	middlewares := []gin.HandlerFunc{
+		middleware.RequestId(),
+		middleware.Logging(),
+	}
 
 	// 路由
 	router.Load(
