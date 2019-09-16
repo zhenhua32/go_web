@@ -22,7 +22,10 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		ctx.String(http.StatusNotFound, "incorrect api router")
 	})
 
+	g.POST("/login", user.Login)
+
 	u := g.Group("/v1/user")
+	u.Use(middleware.AuthJWT()) // 添加认证
 	{
 		u.GET("", user.List)
 		u.POST("", user.Create)

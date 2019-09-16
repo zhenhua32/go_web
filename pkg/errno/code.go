@@ -11,7 +11,7 @@ var (
 	// Common errors
 	OK                  = &Errno{Code: 0, Message: "OK"}
 	InternalServerError = &Errno{Code: 10001, Message: "内部服务器错误"}
-	ErrBind             = &Errno{Code: 10002, Message: "绑定请求体到 stuct 时发生错误"}
+	ErrBind             = &Errno{Code: 10002, Message: "请求参数错误"}
 
 	ErrValidation = &Errno{Code: 20001, Message: "验证失败"}
 	ErrDatabase   = &Errno{Code: 20002, Message: "数据库错误"}

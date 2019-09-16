@@ -12,6 +12,7 @@ require (
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f // indirect
 	github.com/cosiner/argv v0.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.7
+	github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.0
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-delve/delve v1.3.1 // indirect
@@ -21,7 +22,6 @@ require (
 	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/gogo/protobuf v1.3.0 // indirect
 	github.com/golang/groupcache v0.0.0-20190702054246-869f871628b6 // indirect
-	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/google/pprof v0.0.0-20190723021845-34ac40c74b70 // indirect
 	github.com/gorilla/websocket v1.4.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.11.0 // indirect
@@ -60,7 +60,7 @@ require (
 	go.etcd.io/bbolt v1.3.3 // indirect
 	go.starlark.net v0.0.0-20190820173200-988906f77f65 // indirect
 	golang.org/x/arch v0.0.0-20190909030613-46d78d1859ac // indirect
-	golang.org/x/crypto v0.0.0-20190907121410-71b5226ff739
+	golang.org/x/crypto v0.0.0-20190911031432-227b76d455e7
 	golang.org/x/exp v0.0.0-20190829153037-c13cbed26979 // indirect
 	golang.org/x/image v0.0.0-20190902063713-cb417be4ba39 // indirect
 	golang.org/x/mobile v0.0.0-20190830201351-c6da95954960 // indirect

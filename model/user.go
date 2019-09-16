@@ -48,7 +48,7 @@ func (u *UserModel) Update(data map[string]interface{}) error {
 	return DB.Self.Model(u).Updates(data).Error
 }
 
-// 比较密码是否相同
+// 比较密码是否相同, 前提是 UserModel.Password 是已经哈希过的
 func (u *UserModel) Compare(pwd string) error {
 	return auth.Compare(u.Password, pwd)
 }

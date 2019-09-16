@@ -16,12 +16,12 @@ type Response struct {
 
 // 返回固定格式的响应结果
 func SendResponse(ctx *gin.Context, err error, data interface{}) {
-	code, message := errno.DecodeErr(err)
-
 	// 在日志中记录错误
 	if err != nil {
 		logrus.Errorf("响应时发生错误: %+v", err)
 	}
+
+	code, message := errno.DecodeErr(err)
 
 	ctx.JSON(http.StatusOK, Response{
 		Code:    code,

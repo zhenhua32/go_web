@@ -16,7 +16,7 @@ services:
 
   dbclient:
     image: mysql:8
-    command: mysql -hmysql -uroot -p
+    command: mysql -hmysql -uroot -p1234 -D db_apiserver
     # source /home/script/db.sql
     # select * from tb_users \G;
     volumes:

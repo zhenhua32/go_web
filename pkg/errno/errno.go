@@ -14,7 +14,7 @@ func (err Errno) Error() string {
 
 // 定义错误
 type Err struct {
-	Code    int
+	Code    int    // 错误码
 	Message string // 展示给用户看的
 	Errord  error  // 保存内部错误信息
 }
@@ -49,6 +49,9 @@ func DecodeErr(err error) (int, string) {
 	}
 	switch typed := err.(type) {
 	case *Err:
+		if typed.Code == ErrBind.Code {
+			typed.Message = typed.Message + " 具体是 " + typed.Errord.Error()
+		}
 		return typed.Code, typed.Message
 	case *Errno:
 		return typed.Code, typed.Message
