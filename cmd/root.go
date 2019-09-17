@@ -63,7 +63,6 @@ func runServer() {
 
 	// 服务器的地址和端口
 	addr := viper.GetString("addr")
-	logrus.Infof("启动服务器在 http address: %s", addr)
 
 	srv := &http.Server{
 		Addr:    addr,
@@ -71,10 +70,30 @@ func runServer() {
 	}
 	// 启动服务
 	go func() {
+		logrus.Infof("启动服务器在 http address: %s", addr)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logrus.Fatalf("listen: %s\n", err)
+			logrus.Fatalf("listen on http: %s\n", err)
 		}
 	}()
+	/*
+		自签名的语句
+		MSYS_NO_PATHCONV=1 openssl req -new -nodes -x509
+		-out conf/server.crt -keyout conf/server.key -days 3650
+		-subj "/C=CN/ST=SH/L=SH/O=CoolCat/OU=CoolCat Software/CN=127.0.0.1/emailAddress=coolcat@qq.com"
+	*/
+	// 启动 https 服务
+	cert := viper.GetString("tls.cert")
+	key := viper.GetString("tls.key")
+	addrTLS := viper.GetString("tls.addr")
+	if cert != "" && key != "" {
+		go func() {
+			logrus.Infof("启动服务器在 https address: %s", addrTLS)
+			srv.Addr = addrTLS
+			if err := srv.ListenAndServeTLS(cert, key); err != nil && err != http.ErrServerClosed {
+				logrus.Fatalf("listen on https: %s\n", err)
+			}
+		}()
+	}
 
 	// 等待配置改变, 然后重启
 	<-configChange

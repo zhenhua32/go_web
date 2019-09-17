@@ -16,3 +16,8 @@ db:
   username: root
   password: "1234"
 gormlog: true # gorm 的日志魔视, true 是详细日志, false 不记录日志
+tls:
+  addr: :8082 # HTTPS 绑定端口
+  cert: conf/server.crt # 自签发的数字证书
+  key: conf/server.key # 私钥文件
+
