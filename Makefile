@@ -1,0 +1,29 @@
+all: gotool build
+build:
+	@go build ./
+run:
+	@go run ./
+clean:
+	rm -f web
+	find . -name "[._]*.s[a-w][a-z]" | xargs -i rm -f {}
+gotool:
+	go fmt ./
+	go vet ./
+ca:
+	MSYS_NO_PATHCONV=1 openssl req -new -nodes -x509 -out conf/server.crt -keyout conf/server.key -days 3650 -subj "/C=CN/ST=SH/L=SH/O=CoolCat/OU=CoolCat Software/CN=127.0.0.1/emailAddress=coolcat@qq.com"
+mysql:
+	docker-compose up -d mysql
+dbcli:
+	docker-compose run --rm dbclient
+
+help:
+	@echo "make - 格式化 Go 代码, 并编译生成二进制文件"
+	@echo "make build - 编译 Go 代码, 生成二进制文件"
+	@echo "make run - 直接运行 Go 代码"
+	@echo "make clean - 移除二进制文件和 vim swap files"
+	@echo "make gotool - 运行 Go 工具 'fmt' and 'vet'"
+	@echo "make ca - 生成证书文件"
+	@echo "make mysql - 启动 mysql 服务器"
+	@echo "make dbcli - 连接到 mysql 命令行"
+
+.PHONY: run clean gotool ca mysql dbcli help
