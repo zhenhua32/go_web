@@ -10,10 +10,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-func PingServer() error {
+func PingServer(wait chan int) error {
+	defer close(wait)
+	time.Sleep(time.Second)
 	for i := 0; i < viper.GetInt("max_ping_count"); i++ {
 		resp, err := http.Get(viper.GetString("url") + "/check/health")
 		if err == nil && resp.StatusCode == 200 {
+			wait <- 1
 			return nil
 		}
 

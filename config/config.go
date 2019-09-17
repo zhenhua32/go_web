@@ -37,13 +37,19 @@ func (c *Config) InitConfig() error {
 // 监控配置改动
 func (c *Config) WatchConfig(change chan int) {
 	viper.WatchConfig()
-	// TODO: 这个会触发两次, 考虑使用限流模式
+	// TODO: 这个会触发两次, 考虑使用限流模式, 第一次是无效的
 	// https://github.com/gohugoio/hugo/blob/master/watcher/batcher.go
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		logrus.Infof("配置已经被改变: %s", e.Name)
 
-		// time.Sleep(time.Second)
-		if err := viper.ReadInConfig(); err != nil {
+		// 非常有可能读到空的
+		if err := viper.ReadInConfig(); err != nil || viper.GetString("db.addr") == "" {
+			if err == nil {
+				logrus.Warnf("配置更新后读取失败: 未读到数据")
+			} else {
+				logrus.Warnf("配置更新后读取失败: %s", err)
+			}
+
 			return
 		}
 		change <- 1
