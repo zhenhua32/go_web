@@ -1,11 +1,18 @@
 version: "3.7"
 
 services:
+  web:
+    image: golang:1.13
+    volumes:
+      - .:/home/web
+    environment:
+      GOPROXY: "https://goproxy.io"
+
   mysql:
     image: mysql:8
     command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: "1234"
     ports:
       - 3306:3306
 
