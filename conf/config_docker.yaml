@@ -12,7 +12,7 @@ log:
   gin_console: true
 db:
   name: db_apiserver # 数据库名字
-  addr: 127.0.0.1:3306
+  addr: mysql:3306
   username: root
   password: "1234"
 gormlog: true # gorm 的日志魔视, true 是详细日志, false 不记录日志
