@@ -30,3 +30,11 @@ services:
     # select * from tb_users \G;
     volumes:
       - ./script:/home/script
+
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./conf/nginx_web.conf:/etc/nginx/conf.d/nginx_web.conf
+    command: nginx -g 'daemon off;'
