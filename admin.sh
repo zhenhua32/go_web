@@ -4,15 +4,15 @@ SERVER="web"
 BASE_DIR=$PWD
 INTERVAL=2
 
-# 命令行参数，需要手动指定
+# 命令行参数，需要手动指定, 这是在 docker 容器中运行的参数
 ARGS="-c $BASE_DIR/conf/config_docker.yaml"
 
 function start()
 {
-	# if [ "`pgrep $SERVER -u $UID`" != "" ];then
-	# 	echo "$SERVER already running"
-	# 	exit 1
-	# fi
+	if [ "`pgrep $SERVER -u $UID`" != "" ];then
+		echo "$SERVER already running"
+		exit 1
+	fi
 
 	nohup $BASE_DIR/$SERVER $ARGS >/dev/null 2>&1 &
 	echo "sleeping..." &&  sleep $INTERVAL
