@@ -3,6 +3,8 @@ version: "3.7"
 services:
   web:
     image: golang:1.13
+    # https://docs.docker.com/compose/compose-file/#init
+    init: true
     volumes:
       - .:/home/web
     environment:
