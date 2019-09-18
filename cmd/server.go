@@ -3,6 +3,10 @@ package cmd
 import (
 	"context"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -16,6 +20,8 @@ import (
 // 定义 rootCmd 命令的执行
 func runServer() {
 	wait := make(chan int, 1)
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
 	// 初始化数据库
 	model.DB.Init()
@@ -82,11 +88,23 @@ func runServer() {
 			}
 		}()
 	}
-	// FIXME: 当带参数时运行, 更改配置文件后无法连接数据库
-	// 等待配置改变, 然后重启
-	<-configChange
-	if err := srv.Shutdown(context.Background()); err != nil {
-		logrus.Fatal("Server Shutdown:", err)
+
+	// 等待配置改变 或者 收到退出的信号
+	select {
+	case <-configChange:
+		if err := srv.Shutdown(context.Background()); err != nil {
+			logrus.Fatal("Server Shutdown:", err)
+		}
+		defer runServer()
+		return
+	case <-quit:
+		logrus.Info("收到退出的信号")
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		if err := srv.Shutdown(ctx); err != nil {
+			logrus.Fatal("Server Shutdown: ", err)
+		}
+		logrus.Println("Server exiting")
+		return
 	}
-	runServer()
 }

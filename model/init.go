@@ -23,7 +23,9 @@ func (db *Database) Init() {
 }
 
 func (db *Database) Close() {
-	DB.Self.Close()
+	if err := DB.Self.Close(); err != nil {
+		logrus.Fatal("关闭数据库连接时发生错误:", err)
+	}
 }
 
 func openDB(username, password, addr, name string) *gorm.DB {
