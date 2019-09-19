@@ -13,6 +13,7 @@ require (
 	github.com/cosiner/argv v0.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.0
+	github.com/gin-contrib/pprof v1.2.1
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/gin-gonic/gin v1.4.0
 	github.com/go-delve/delve v1.3.1 // indirect

@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"tzh.com/web/handler/check"
 	"tzh.com/web/handler/user"
@@ -18,9 +19,13 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.Use(middleware.Secure())
 	g.Use(mw...)
 
+	// 404 handler
 	g.NoRoute(func(ctx *gin.Context) {
 		ctx.String(http.StatusNotFound, "incorrect api router")
 	})
+
+	// pprof router, default is "debug/pprof"
+	pprof.Register(g)
 
 	g.POST("/login", user.Login)
 
