@@ -1,0 +1,53 @@
+basePath: /v1
+definitions:
+  user.CreateRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  user.CreateResponse:
+    properties:
+      username:
+        type: string
+    type: object
+host: 127.0.0.1:8081
+info:
+  contact:
+    email: help@coolcat.io
+    name: coolcat
+    url: http://coolcat.io/support
+  description: This is a sample api server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://coolcat.io/terms/
+  title: Apiserver Example API
+  version: "1.0"
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Add a new user
+      parameters:
+      - description: Create a new user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateRequest'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"username":"kong"}}'
+          schema:
+            $ref: '#/definitions/user.CreateResponse'
+            type: object
+      summary: Add new user to the database
+      tags:
+      - user
+swagger: "2.0"

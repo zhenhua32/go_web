@@ -9,7 +9,14 @@ import (
 	"tzh.com/web/util"
 )
 
-// 创建一个新的用户帐号
+// @Summary Add new user to the database
+// @Description Add a new user
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Param user body user.CreateRequest true "Create a new user"
+// @Success 200 {object} user.CreateResponse "{"code":0,"message":"OK","data":{"username":"kong"}}"
+// @Router /user [post]
 func Create(ctx *gin.Context) {
 	logrus.WithField(
 		"X-Request-Id", util.GetReqID(ctx),
