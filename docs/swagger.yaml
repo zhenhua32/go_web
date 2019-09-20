@@ -108,7 +108,6 @@ paths:
       - description: part match username
         in: query
         name: username
-        required: true
         type: string
       - default: 0
         description: data offset
