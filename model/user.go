@@ -84,11 +84,10 @@ func ValidateAndUpdateUser(data *map[string]interface{}) error {
 		}
 		// 加密密码
 		newPassword, err := auth.Encrypt(password.(string))
-		if err == nil {
-			(*data)["password"] = newPassword
-		} else {
+		if err != nil {
 			return err
 		}
+		(*data)["password"] = newPassword
 	}
 
 	return nil

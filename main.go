@@ -2,10 +2,9 @@ package main
 
 import "tzh.com/web/cmd"
 
-// @title Apiserver Example API
+// @title Apiserver API
 // @version 1.0
-// @description This is a sample api server.
-// @termsOfService http://coolcat.io/terms/
+// @description This is a simple api server.
 
 // @contact.name coolcat
 // @contact.url http://coolcat.io/support
@@ -16,6 +15,10 @@ import "tzh.com/web/cmd"
 
 // @host 127.0.0.1:8081
 // @BasePath /v1
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	cmd.Execute()
 }

@@ -12,9 +12,9 @@ type CreateResponse struct {
 }
 
 type ListRequest struct {
-	Username string `json:"username"`
-	Offset   int    `json:"offset"`
-	Limit    int    `json:"limit"`
+	Username string `json:"username" form:"username"`
+	Offset   int    `json:"offset" form:"offset"`
+	Limit    int    `json:"limit" form:"limit"`
 }
 
 type ListResponse struct {

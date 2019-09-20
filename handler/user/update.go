@@ -12,6 +12,16 @@ import (
 )
 
 // 完整更新, 所有的字段都应该传递
+// @Summary 完整更新用户信息
+// @Description 在数据库中完整更新用户信息
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Param id path uint64 true "user id in database"
+// @Param user body model.UserModel true "user info"
+// @Success 200 {object} handler.Response "{"code":0,"message":"OK","data": {}}"
+// @Router /user/{id} [put]
 func Save(ctx *gin.Context) {
 	logrus.WithField(
 		"X-Request-Id", util.GetReqID(ctx),
@@ -48,6 +58,16 @@ func Save(ctx *gin.Context) {
 }
 
 // 选择更新, 只更新传递的字段
+// @Summary 部分更新用户信息
+// @Description 在数据库中部分更新用户信息
+// @Tags user
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Param id path uint64 true "user id in database"
+// @Param user body model.UserModel false "user info"
+// @Success 200 {object} handler.Response "{"code":0,"message":"OK","data": {}}"
+// @Router /user/{id} [patch]
 func Update(ctx *gin.Context) {
 	logrus.WithField(
 		"X-Request-Id", util.GetReqID(ctx),

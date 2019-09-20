@@ -9,13 +9,14 @@ import (
 	"tzh.com/web/util"
 )
 
-// @Summary Add new user to the database
-// @Description Add a new user
+// @Summary 创建用户
+// @Description 插入新用户到数据库中
 // @Tags user
 // @Accept  json
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param user body user.CreateRequest true "Create a new user"
-// @Success 200 {object} user.CreateResponse "{"code":0,"message":"OK","data":{"username":"kong"}}"
+// @Success 200 {object} user.CreateResponse "{"code":0,"message":"OK","data": {}}"
 // @Router /user [post]
 func Create(ctx *gin.Context) {
 	logrus.WithField(

@@ -1,9 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample api server.",
-        "title": "Apiserver Example API",
-        "termsOfService": "http://coolcat.io/terms/",
+        "description": "This is a simple api server.",
+        "title": "Apiserver API",
         "contact": {
             "name": "coolcat",
             "url": "http://coolcat.io/support",
@@ -18,9 +17,50 @@
     "host": "127.0.0.1:8081",
     "basePath": "/v1",
     "paths": {
-        "/user": {
+        "/login": {
             "post": {
-                "description": "Add a new user",
+                "description": "登录账户, 获取 token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "login"
+                ],
+                "summary": "登录",
+                "parameters": [
+                    {
+                        "description": "User login",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"token\":\"name\"}}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.Token"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "从数据库中获取所有用户的信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -30,7 +70,59 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "Add new user to the database",
+                "summary": "获取所有用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "part match username",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 0,
+                        "description": "data offset",
+                        "name": "offset",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "data limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/user.ListResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "插入新用户到数据库中",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "创建用户",
                 "parameters": [
                     {
                         "description": "Create a new user",
@@ -45,7 +137,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"username\":\"kong\"}}",
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/user.CreateResponse"
@@ -53,9 +145,275 @@
                     }
                 }
             }
+        },
+        "/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "从数据库中获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取用户",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id in database",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserModel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "在数据库中完整更新用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "完整更新用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id in database",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "user info",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "在数据库中标记用户为删除状态",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id in database",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": null}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "在数据库中部分更新用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "部分更新用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user id in database",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "user info",
+                        "name": "user",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{username}/byname": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "从数据库中获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取用户",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user's username in database",
+                        "name": "username",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.UserModel"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "handler.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Token": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserInfo": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "say_hello": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserModel": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "user.CreateRequest": {
             "type": "object",
             "properties": {
@@ -74,6 +432,27 @@
                     "type": "string"
                 }
             }
+        },
+        "user.ListResponse": {
+            "type": "object",
+            "properties": {
+                "total_count": {
+                    "type": "integer"
+                },
+                "user_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UserInfo"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

@@ -10,7 +10,7 @@ gitTreeState = $(shell if git status|grep -q 'clean';then echo clean; else echo 
 ldflags="-w -X ${versionDir}.gitTag=${gitTag} -X ${versionDir}.buildDate=${buildDate} -X ${versionDir}.gitCommit=${gitCommit} -X ${versionDir}.gitTreeState=${gitTreeState}"
 
 all: gotool build
-build:
+build: updoc
 	go build -ldflags ${ldflags} ./
 run:
 	go run -ldflags ${ldflags} ./
@@ -26,6 +26,8 @@ mysql:
 	docker-compose up -d mysql
 dbcli:
 	docker-compose run --rm dbclient
+updoc:
+	swag init
 
 help:
 	@echo "make - 格式化 Go 代码, 并编译生成二进制文件"

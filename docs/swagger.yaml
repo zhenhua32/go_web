@@ -1,5 +1,46 @@
 basePath: /v1
 definitions:
+  handler.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      message:
+        type: string
+    type: object
+  model.Token:
+    properties:
+      token:
+        type: string
+    type: object
+  model.UserInfo:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      say_hello:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserModel:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   user.CreateRequest:
     properties:
       password:
@@ -12,25 +53,92 @@ definitions:
       username:
         type: string
     type: object
+  user.ListResponse:
+    properties:
+      total_count:
+        type: integer
+      user_list:
+        items:
+          $ref: '#/definitions/model.UserInfo'
+        type: array
+    type: object
 host: 127.0.0.1:8081
 info:
   contact:
     email: help@coolcat.io
     name: coolcat
     url: http://coolcat.io/support
-  description: This is a sample api server.
+  description: This is a simple api server.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://coolcat.io/terms/
-  title: Apiserver Example API
+  title: Apiserver API
   version: "1.0"
 paths:
-  /user:
+  /login:
     post:
       consumes:
       - application/json
-      description: Add a new user
+      description: 登录账户, 获取 token
+      parameters:
+      - description: User login
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserModel'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data":{"token":"name"}}'
+          schema:
+            $ref: '#/definitions/model.Token'
+            type: object
+      summary: 登录
+      tags:
+      - login
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: 从数据库中获取所有用户的信息
+      parameters:
+      - description: part match username
+        in: query
+        name: username
+        required: true
+        type: string
+      - default: 0
+        description: data offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      - default: 10
+        description: data limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data": {}}'
+          schema:
+            $ref: '#/definitions/user.ListResponse'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取所有用户
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: 插入新用户到数据库中
       parameters:
       - description: Create a new user
         in: body
@@ -43,11 +151,148 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"code":0,"message":"OK","data":{"username":"kong"}}'
+          description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/user.CreateResponse'
             type: object
-      summary: Add new user to the database
+      security:
+      - ApiKeyAuth: []
+      summary: 创建用户
       tags:
       - user
+  /user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 在数据库中标记用户为删除状态
+      parameters:
+      - description: user id in database
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data": null}'
+          schema:
+            $ref: '#/definitions/handler.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: 从数据库中获取用户信息
+      parameters:
+      - description: user id in database
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data": {}}'
+          schema:
+            $ref: '#/definitions/model.UserModel'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: 在数据库中部分更新用户信息
+      parameters:
+      - description: user id in database
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: user info
+        in: body
+        name: user
+        schema:
+          $ref: '#/definitions/model.UserModel'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data": {}}'
+          schema:
+            $ref: '#/definitions/handler.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 部分更新用户信息
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: 在数据库中完整更新用户信息
+      parameters:
+      - description: user id in database
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: user info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserModel'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data": {}}'
+          schema:
+            $ref: '#/definitions/handler.Response'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 完整更新用户信息
+      tags:
+      - user
+  /user/{username}/byname:
+    get:
+      consumes:
+      - application/json
+      description: 从数据库中获取用户信息
+      parameters:
+      - description: user's username in database
+        in: path
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"message":"OK","data": {}}'
+          schema:
+            $ref: '#/definitions/model.UserModel'
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

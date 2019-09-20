@@ -8,6 +8,14 @@ import (
 	"tzh.com/web/pkg/token"
 )
 
+// @Summary 登录
+// @Description 登录账户, 获取 token
+// @Tags login
+// @Accept  json
+// @Produce  json
+// @Param body body model.UserModel true "User login""
+// @Success 200 {object} model.Token "{"code":0,"message":"OK","data":{"token":"name"}}"
+// @Router /login [post]
 func Login(ctx *gin.Context) {
 	var u model.UserModel
 	// 应该使用 ShouldBindJSON, 以便使用自定义的 handler.SendResponse

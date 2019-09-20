@@ -34,25 +34,31 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 
 	// swagger 文档
 	// The url pointing to API definition
-	// url := ginSwagger.URL("/swagger/swagger.json")
-	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	url := ginSwagger.URL("/swagger/doc.json")
+	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
-	g.POST("/login", user.Login)
+	// 健康检查
+	g.GET("/health", check.HealthCheck)
+	// 创建用户, 无验证版
+	g.POST("/user", user.Create)
+
+	// 版本 v1
+	g.POST("/v1/login", user.Login)
 
 	u := g.Group("/v1/user")
 	u.Use(middleware.AuthJWT()) // 添加认证
 	{
 		u.GET("", user.List)
 		u.POST("", user.Create)
-		u.PUT("/:id", user.Save)
-		u.DELETE("/:d", user.Delete)
 		u.GET("/:id", user.Get)
+		u.PUT("/:id", user.Save)
 		u.PATCH("/:id", user.Update)
+		u.DELETE("/:id", user.Delete)
 		// 设计得不太好, 只能用 id 作为占位符
 		u.GET("/:id/byname", user.GetByName)
 	}
 
-	checkRoute := g.Group("/check")
+	checkRoute := g.Group("/v1/check")
 	{
 		checkRoute.GET("/health", check.HealthCheck)
 		checkRoute.GET("/disk", check.DiskCheck)
