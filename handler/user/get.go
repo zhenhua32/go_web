@@ -19,10 +19,10 @@ import (
 // @Success 200 {object} model.UserModel "{"code":0,"message":"OK","data": {}}"
 // @Router /user/{id} [get]
 func Get(ctx *gin.Context) {
-	userId, _ := strconv.Atoi(ctx.Param("id"))
+	userID, _ := strconv.Atoi(ctx.Param("id"))
 	user := model.UserModel{}
 
-	if err := user.Fill(uint(userId)); err != nil {
+	if err := user.Fill(uint(userID)); err != nil {
 		handler.SendResponse(ctx, errno.New(errno.ErrFill, err), nil)
 		return
 	}
@@ -40,7 +40,7 @@ func Get(ctx *gin.Context) {
 // @Success 200 {object} model.UserModel "{"code":0,"message":"OK","data": {}}"
 // @Router /user/{username}/byname [get]
 func GetByName(ctx *gin.Context) {
-	username := ctx.Param("id")
+	username := ctx.Param("name")
 	user, err := model.GetUserByName(username)
 	if err != nil {
 		handler.SendResponse(ctx, errno.New(errno.ErrFill, err), nil)

@@ -54,8 +54,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		u.PUT("/:id", user.Save)
 		u.PATCH("/:id", user.Update)
 		u.DELETE("/:id", user.Delete)
-		// 设计得不太好, 只能用 id 作为占位符
-		u.GET("/:id/byname", user.GetByName)
+	}
+
+	um := g.Group("/v1/username")
+	um.Use(middleware.AuthJWT())
+	{
+		um.GET("/:name", user.GetByName)
 	}
 
 	checkRoute := g.Group("/v1/check")

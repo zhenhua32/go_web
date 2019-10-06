@@ -26,7 +26,7 @@ func Save(ctx *gin.Context) {
 	logrus.WithField(
 		"X-Request-Id", util.GetReqID(ctx),
 	).Info("用户更新函数被调用")
-	userId, _ := strconv.Atoi(ctx.Param("id"))
+	userID, _ := strconv.Atoi(ctx.Param("id"))
 
 	var u model.UserModel
 	if err := ctx.ShouldBindJSON(&u); err != nil {
@@ -34,7 +34,7 @@ func Save(ctx *gin.Context) {
 		return
 	}
 
-	u.ID = uint(userId)
+	u.ID = uint(userID)
 
 	// 校验数据
 	if err := u.Validate(); err != nil {
@@ -72,7 +72,7 @@ func Update(ctx *gin.Context) {
 	logrus.WithField(
 		"X-Request-Id", util.GetReqID(ctx),
 	).Info("用户更新函数被调用")
-	userId, _ := strconv.Atoi(ctx.Param("id"))
+	userID, _ := strconv.Atoi(ctx.Param("id"))
 
 	var data map[string]interface{}
 	if err := ctx.ShouldBindJSON(&data); err != nil {
@@ -88,7 +88,7 @@ func Update(ctx *gin.Context) {
 
 	// 更新数据库
 	user := &model.UserModel{}
-	user.ID = uint(userId)
+	user.ID = uint(userID)
 	if err := user.Update(data); err != nil {
 		handler.SendResponse(ctx, errno.New(errno.ErrDatabase, err), nil)
 		return
