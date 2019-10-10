@@ -36,7 +36,7 @@ func ListUser(username string, offset, limit int) ([]*model.UserInfo, uint, erro
 		go func(u *model.UserModel) {
 			defer wg.Done()
 
-			shortId, err := util.GenShortId()
+			shortID, err := util.GenShortID()
 			if err != nil {
 				errChan <- err
 				return
@@ -49,7 +49,7 @@ func ListUser(username string, offset, limit int) ([]*model.UserInfo, uint, erro
 			userList.IdMap[u.ID] = &model.UserInfo{
 				ID:        u.ID,
 				Username:  u.Username,
-				SayHello:  fmt.Sprintf("Hello %s", shortId),
+				SayHello:  fmt.Sprintf("Hello %s", shortID),
 				Password:  u.Password,
 				CreatedAt: util.TimeToStr(&u.CreatedAt),
 				UpdatedAt: util.TimeToStr(&u.UpdatedAt),
