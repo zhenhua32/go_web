@@ -34,10 +34,9 @@ func (u *UserModel) Delete(hard bool) error {
 	if hard {
 		// 硬删除
 		return DB.Self.Unscoped().Delete(u).Error
-	} else {
-		// 软删除
-		return DB.Self.Delete(u).Error
 	}
+	// 软删除
+	return DB.Self.Delete(u).Error
 }
 
 // Save 保存用户, 会更新所有的字段
