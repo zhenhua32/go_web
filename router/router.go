@@ -15,7 +15,7 @@ import (
 	_ "tzh.com/web/docs"
 )
 
-// 载入中间件
+// Load 载入中间件
 func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	g.Use(gin.Logger())
 	g.Use(gin.Recovery())
