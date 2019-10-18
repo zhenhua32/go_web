@@ -34,7 +34,7 @@ func runServer() {
 	app := gin.New()
 	// 保存中间件
 	middlewares := []gin.HandlerFunc{
-		middleware.RequestId(),
+		middleware.RequestID(),
 		middleware.Logging(),
 	}
 

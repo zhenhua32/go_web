@@ -45,6 +45,8 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 	// 版本 v1
 	g.POST("/v1/login", user.Login)
 
+	g.POST("/v1/create", user.Create) // 为了方便创建用户, 无需认证
+
 	u := g.Group("/v1/user")
 	u.Use(middleware.AuthJWT()) // 添加认证
 	{

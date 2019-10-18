@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 阻止缓存响应
+// NoCache 阻止缓存响应
 func NoCache() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Header("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate, value")
@@ -17,7 +17,7 @@ func NoCache() gin.HandlerFunc {
 	}
 }
 
-// 响应 options 请求, 并退出
+// Options 响应 options 请求, 并退出
 func Options() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if ctx.Request.Method != "OPTIONS" {
@@ -33,7 +33,7 @@ func Options() gin.HandlerFunc {
 	}
 }
 
-// 安全设置
+// Secure 安全设置
 func Secure() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		ctx.Header("Access-Control-Allow-Origin", "*")

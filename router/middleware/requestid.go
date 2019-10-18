@@ -5,18 +5,18 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-// 在请求头中设置 X-Request-Id
-func RequestId() gin.HandlerFunc {
+// RequestID 在请求头中设置 X-Request-Id
+func RequestID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		requestId := ctx.Request.Header.Get("X-Request-Id")
+		requestID := ctx.Request.Header.Get("X-Request-Id")
 
-		if requestId == "" {
-			requestId = uuid.NewV4().String()
+		if requestID == "" {
+			requestID = uuid.NewV4().String()
 		}
 
-		ctx.Set("X-Request-Id", requestId)
+		ctx.Set("X-Request-Id", requestID)
 
-		ctx.Header("X-Request-Id", requestId)
+		ctx.Header("X-Request-Id", requestID)
 		ctx.Next()
 	}
 }

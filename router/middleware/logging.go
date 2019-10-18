@@ -25,7 +25,7 @@ func (w bodyLogWriter) Write(b []byte) (int, error) {
 	return w.ResponseWriter.Write(b)
 }
 
-// 定义日志组件, 记录每一个请求
+// Logging 定义日志组件, 记录每一个请求
 func Logging() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		path := ctx.Request.URL.Path
