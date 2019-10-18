@@ -23,3 +23,16 @@
 - v0.14.0 添加 Nginx 配置
 - v0.15.0 添加测试的例子
 - v0.16.0 添加 swagger 文档
+
+## 运行
+
+方式一: 在 docker 中运行 mysql, 本地启动服务器
+
+```bash
+# 后台启动 mysql 服务器
+docker-compose up -d mysql
+# 初始化数据库
+docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
+# 运行服务器
+go run ./
+```
