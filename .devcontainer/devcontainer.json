@@ -37,8 +37,8 @@
 
   // Mount your .ssh folder to /root/.ssh-localhost so we can copy its contents
   "runArgs": [
-    "-v",
-    "${env:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro"
+    // "-v",
+    // "${env:HOME}${env:USERPROFILE}/.ssh:/root/.ssh-localhost:ro"
   ],
 
   // Copy the contents to the correct location and set permissions
