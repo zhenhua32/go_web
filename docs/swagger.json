@@ -46,7 +46,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\":{\"token\":\"name\"}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.Token"
                         }
                     }
@@ -99,7 +98,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/user.ListResponse"
                         }
                     }
@@ -138,7 +136,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/user.CreateResponse"
                         }
                     }
@@ -176,7 +173,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.UserModel"
                         }
                     }
@@ -222,7 +218,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/handler.Response"
                         }
                     }
@@ -258,7 +253,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": null}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/handler.Response"
                         }
                     }
@@ -303,7 +297,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/handler.Response"
                         }
                     }
@@ -341,7 +334,6 @@
                     "200": {
                         "description": "{\"code\":0,\"message\":\"OK\",\"data\": {}}",
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.UserModel"
                         }
                     }

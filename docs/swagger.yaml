@@ -95,7 +95,6 @@ paths:
           description: '{"code":0,"message":"OK","data":{"token":"name"}}'
           schema:
             $ref: '#/definitions/model.Token'
-            type: object
       summary: 登录
       tags:
       - login
@@ -128,7 +127,6 @@ paths:
           description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/user.ListResponse'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 获取所有用户
@@ -153,7 +151,6 @@ paths:
           description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/user.CreateResponse'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 创建用户
@@ -177,7 +174,6 @@ paths:
           description: '{"code":0,"message":"OK","data": null}'
           schema:
             $ref: '#/definitions/handler.Response'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 删除用户
@@ -200,7 +196,6 @@ paths:
           description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/model.UserModel'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 获取用户
@@ -229,7 +224,6 @@ paths:
           description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/handler.Response'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 部分更新用户信息
@@ -259,7 +253,6 @@ paths:
           description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/handler.Response'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 完整更新用户信息
@@ -283,7 +276,6 @@ paths:
           description: '{"code":0,"message":"OK","data": {}}'
           schema:
             $ref: '#/definitions/model.UserModel'
-            type: object
       security:
       - ApiKeyAuth: []
       summary: 获取用户

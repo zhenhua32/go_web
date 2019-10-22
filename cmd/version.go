@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"tzh.com/web/pkg/version"
 )
@@ -14,7 +13,6 @@ var versionCmd = &cobra.Command{
 	Short: "Print the version info of server",
 	Long:  "Print the version info of server",
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.Info("命令参数: ", args)
 		printVersion()
 	},
 }

@@ -1,6 +1,7 @@
+SHELL := /bin/bash
 BASEDIR = $(shell pwd)
 
-# build with verison infos
+# build with version infos
 versionDir = "tzh.com/web/pkg/version"
 gitTag = $(shell if [ "`git describe --tags --abbrev=0 2>/dev/null`" != "" ];then git describe --tags --abbrev=0; else git log --pretty=format:'%h' -n 1; fi)
 buildDate = $(shell TZ=UTC date +%FT%T%z)
@@ -12,8 +13,10 @@ ldflags="-w -X ${versionDir}.gitTag=${gitTag} -X ${versionDir}.buildDate=${build
 all: gotool build
 build: updoc
 	go build -ldflags ${ldflags} ./
-run:
+run: updoc
 	go run -ldflags ${ldflags} ./
+docker: updoc
+	go run -ldflags ${ldflags} ./ -c ./conf/config_docker.yaml
 clean:
 	rm -f web
 	find . -name "[._]*.s[a-w][a-z]" | xargs -i rm -f {}
@@ -27,6 +30,8 @@ mysql:
 dbcli:
 	docker-compose run --rm dbclient
 updoc:
+	go mod download
+	go get -u github.com/swaggo/swag/cmd/swag
 	swag init
 
 help:
