@@ -1,9 +1,14 @@
 # systemd config for go_web
 # must run after mysql start
 
+# make build
+# cp conf/go_web.service /etc/systemd/system/
+# systemctl start go_web
+# systemctl status go_web
+
 [Unit]
 Description=go web api server
 
 [Service]
-ExecStart=/home/go_web/web -c /home/go_web/conf/config.yaml
+ExecStart=/home/go_web/web -c /home/go_web/conf/config_abs.yaml
 

@@ -1,4 +1,4 @@
-# config for docker
+# config with absolute path
 runmode: debug # 开发模式, debug, release, test
 addr: :8081 # HTTP绑定端口
 name: web_tt # API Server的名字
@@ -7,18 +7,18 @@ max_ping_count: 5 # pingServer函数try的次数
 log:
   logrus_json: true
   logrus_level: debug
-  logrus_file: log/server.log
+  logrus_file: /home/go_web/log/server.log
   logrus_console: true
-  gin_file: log/gin.log
+  gin_file: /home/go_web/log/gin.log
   gin_console: true
 db:
   name: db_apiserver # 数据库名字
-  addr: mysql:3306
+  addr: 127.0.0.1:3306
   username: root
   password: "1234"
 gormlog: true # gorm 的日志魔视, true 是详细日志, false 不记录日志
 tls:
   addr: :443 # HTTPS 绑定端口
-  cert: conf/server.crt # 自签发的数字证书
-  key: conf/server.key # 私钥文件
+  cert: /home/go_web/conf/server.crt # 自签发的数字证书
+  key: /home/go_web/conf/server.key # 私钥文件
 
