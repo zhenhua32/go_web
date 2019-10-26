@@ -26,6 +26,8 @@
 
 ## 运行
 
+假设: 在项目根目录下运行命令
+
 方式一: 在 docker 中运行 mysql, 本地启动服务器
 
 ```bash
@@ -35,4 +37,40 @@ docker-compose up -d mysql
 docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
 # 运行服务器
 go run ./
+```
+
+方式二: 在 docker 中运行 mysql, 本地编译二进制文件, 直接启动
+
+```bash
+# 后台启动 mysql 服务器
+docker-compose up -d mysql
+# 初始化数据库
+docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
+# 编译, 应该会在当前目录下生成一个叫做 web 的二进制文件
+make build
+# 运行
+web
+```
+
+方式三: 在 docker 中运行 mysql, 使用 systemd 接管服务
+
+额外要求: 目录应该是 /home/go_web/, 否则需要更改配置中的路径
+
+使用的配置路径是 /home/go_web/conf/config_abs.yaml
+
+```bash
+# 后台启动 mysql 服务器
+docker-compose up -d mysql
+# 初始化数据库
+docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
+# 编译, 应该会在当前目录下生成一个叫做 web 的二进制文件
+make build
+# 复制文件到 systemd 的配置文件夹
+cp conf/go_web.service /etc/systemd/system/
+# 启动
+systemctl start go_web
+# 查看状态
+systemctl status go_web
+# 停止
+systemctl stop go_web
 ```

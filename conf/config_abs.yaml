@@ -18,7 +18,7 @@ db:
   password: "1234"
 gormlog: true # gorm 的日志魔视, true 是详细日志, false 不记录日志
 tls:
-  addr: :443 # HTTPS 绑定端口
+  addr: :8443 # HTTPS 绑定端口
   cert: /home/go_web/conf/server.crt # 自签发的数字证书
   key: /home/go_web/conf/server.key # 私钥文件
 
