@@ -29,11 +29,12 @@ func Load(g *gin.Engine, mw ...gin.HandlerFunc) *gin.Engine {
 		ctx.String(http.StatusNotFound, "incorrect api router")
 	})
 
-	// pprof router, default is "debug/pprof"
+	// pprof router, default is "/debug/pprof"
 	pprof.Register(g)
 
 	// swagger 文档
 	// The url pointing to API definition
+	// /swagger/index.html
 	url := ginSwagger.URL("/swagger/doc.json")
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
