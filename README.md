@@ -74,3 +74,16 @@ systemctl status go_web
 # 停止
 systemctl stop go_web
 ```
+
+方式四: 完全运行在 docker-compose 中
+
+```bash
+# 后台启动 mysql 服务器
+docker-compose up -d mysql
+# 初始化数据库
+docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
+# 预先构建 app
+docker-compose build app
+# 启动, 注意这里运行了 3 个 app
+docker-compose up --scale app=3  nginx
+```

@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// PingServer 测试连通性
 func PingServer(wait chan int) error {
 	defer close(wait)
 	time.Sleep(time.Second)
