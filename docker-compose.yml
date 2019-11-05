@@ -19,11 +19,13 @@ services:
 
   mysql:
     image: mysql:8
-    command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: "1234"
     ports:
       - 3306:3306
+    volumes:
+        - ./script/db.sql:/data/application/init.sql
 
   adminer:
     image: adminer:4

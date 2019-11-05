@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -9,19 +10,22 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Database 是数据库实例
 type Database struct {
 	Self *gorm.DB
 }
 
-// 单例
+// DB 是个单例
 var DB *Database
 
+// Init 初始化数据库单例
 func (db *Database) Init() {
 	DB = &Database{
 		Self: GetDB(),
 	}
 }
 
+// Close 关闭数据库连接
 func (db *Database) Close() {
 	if err := DB.Self.Close(); err != nil {
 		logrus.Fatal("关闭数据库连接时发生错误:", err)
@@ -30,7 +34,7 @@ func (db *Database) Close() {
 
 func openDB(username, password, addr, name string) *gorm.DB {
 	config := fmt.Sprintf(
-		"%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s",
+		"%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=%t&loc=%s&timeout=10s",
 		username,
 		password,
 		addr,
@@ -39,12 +43,19 @@ func openDB(username, password, addr, name string) *gorm.DB {
 		// "Asia%2FShanghai",  // 必须是 url.QueryEscape 的
 		"Local",
 	)
-	db, err := gorm.Open("mysql", config)
-	if err != nil {
-		logrus.Fatalf("数据库连接失败. 数据库名字: %s. 错误信息: %s", name, err)
-	} else {
-		logrus.Infof("数据库连接成功, 数据库名字: %s", name)
+	var db *gorm.DB
+	var err error
+	for i := 0; i < 10; i++ {
+		db, err = gorm.Open("mysql", config)
+		if err == nil {
+			break
+		}
+		time.Sleep(time.Second * 3)
 	}
+	if db == nil {
+		logrus.Fatalf("数据库连接失败. 数据库名字: %s. 错误信息: %s", name, err)
+	}
+	logrus.Infof("数据库连接成功, 数据库名字: %s", name)
 
 	setupDB(db)
 	return db
@@ -61,6 +72,7 @@ func setupDB(db *gorm.DB) {
 	db.AutoMigrate(&UserModel{})
 }
 
+// InitDB 初始化数据库
 func InitDB() *gorm.DB {
 	return openDB(
 		viper.GetString("db.username"),
@@ -70,6 +82,7 @@ func InitDB() *gorm.DB {
 	)
 }
 
+// GetDB 获取数据库实例
 func GetDB() *gorm.DB {
 	return InitDB()
 }

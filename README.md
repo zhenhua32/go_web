@@ -34,8 +34,6 @@
 ```bash
 # 后台启动 mysql 服务器
 docker-compose up -d mysql
-# 初始化数据库
-docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
 # 运行服务器
 go run ./
 ```
@@ -45,8 +43,6 @@ go run ./
 ```bash
 # 后台启动 mysql 服务器
 docker-compose up -d mysql
-# 初始化数据库
-docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
 # 编译, 应该会在当前目录下生成一个叫做 web 的二进制文件
 make build
 # 运行
@@ -62,8 +58,6 @@ web
 ```bash
 # 后台启动 mysql 服务器
 docker-compose up -d mysql
-# 初始化数据库
-docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
 # 编译, 应该会在当前目录下生成一个叫做 web 的二进制文件
 make build
 # 复制文件到 systemd 的配置文件夹
@@ -81,10 +75,8 @@ systemctl stop go_web
 ```bash
 # 后台启动 mysql 服务器
 docker-compose up -d mysql
-# 初始化数据库
-docker-compose run --rm dbclient bash -c "cat /home/script/db.sql | mysql -hmysql -uroot -p1234"
 # 预先构建 app
 docker-compose build app
 # 启动, 注意这里运行了 3 个 app
-docker-compose up --scale app=3  nginx
+docker-compose up --scale app=3 nginx
 ```
