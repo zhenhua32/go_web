@@ -7,7 +7,7 @@ require (
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
-	github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23 // indirect
+	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.15+incompatible // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
